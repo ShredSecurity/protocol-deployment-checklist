@@ -23,6 +23,17 @@
     - Tests where init is called unexpectedly / twice / by wrong address.
     - Tests for emergency pause / shutdown.
 
+### 4. Assets / external tokens
+
+- For each external token:
+    - Have we defined in the spec doc for each network:
+        - Token contract address
+        - Expected `symbol()`
+        - Expected `decimals()`
+    - Are we clear on token behavior?
+        - For each external asset, confirm that its behavior matches what your protocol expects.
+Example: some chains have a “WETH” token address that is not a canonical wrapped ETH contract, it may simply be a standard ERC-20 with no `deposit()` or `withdraw()` function (e.g., certain networks’ WETH tokens behave this way like SAGA).
+If your system assumes native wrap/unwrap semantics, this must be verified and documented per network.
 
 ## B. Deployment plan (scripts + human steps)
 
