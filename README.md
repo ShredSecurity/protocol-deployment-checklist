@@ -23,7 +23,6 @@
     - Tests where init is called unexpectedly / twice / by wrong address.
     - Tests for emergency pause / shutdown.
 
-* * *
 
 ## B. Deployment plan (scripts + human steps)
 
@@ -65,7 +64,6 @@
 - Secure backups / hardware wallets configured.
 - Role assignment (RBAC) executed and recorded.
 
-* * *
 
 ## C. Post-deployment checks (right after mainnet deploy)
 
