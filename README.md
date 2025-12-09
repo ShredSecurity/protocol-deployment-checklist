@@ -6,21 +6,21 @@ This checklist is a deployment-readiness framework for smart contract protocols,
 
 ## Table of Contents
 
-### Pre-Deployment (Design & Review)
-#### 1.1 Architecture & Upgradeability
-#### 1.2 Threat Model & Deployment Risks
-#### 1.3 Audits & Testing Readiness
-#### 1.4 External Asset & Token Behavior Validation
-### Deployment Plan (Scripts + Human Steps)
-#### 2.1 Deployment script sanity
-#### 2.2 Proxy Deployment & Initialization Controls
-#### 2.3 Explorer Verification & Alias Consistency
-#### 2.4 Admin & Key Management Requirements
-### Post-Deployment Checks
-#### 3.1 On-Chain Read-Only Sanity Validation
-#### 3.2 Functional Smoke Tests
-#### 3.3 Monitoring, Alerting & Observability Setup
-#### 3.4 Emergency Procedures & Incident Response
+1. Pre-Deployment (Design & Review)
+    - 1.1 Architecture & Upgradeability
+    - 1.2 Threat Model & Deployment Risks
+    - 1.3 Audits & Testing Readiness
+    - 1.4 External Asset & Token Behavior Validation
+2. Deployment Plan (Scripts + Human Steps)
+    - 2.1 Deployment script sanity
+    - 2.2 Proxy Deployment & Initialization Controls
+    - 2.3 Explorer Verification & Alias Consistency
+    - 2.4 Admin & Key Management Requirements
+3. Post-Deployment Checks
+    - 3.1 On-Chain Read-Only Sanity Validation
+    - 3.2 Functional Smoke Tests
+    - 3.3 Monitoring, Alerting & Observability Setup
+    - 3.4 Emergency Procedures & Incident Response
 
 ## Pre-deployment (design & review)
 
