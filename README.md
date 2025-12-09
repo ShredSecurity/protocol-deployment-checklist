@@ -75,7 +75,6 @@ If your system assumes native wrap/unwrap semantics, this must be verified and d
 - Deterministic address / salt planning:
 	- if using CREATE2/CREATE3, precompute target addresses (`ethers.utils.getCreate2Address`)
 	- verify salts and factory deployment ordering.
-		- Simulate gas execution paths (`eth_estimateGas` / Hardhat simulation) to avoid mid-deploy OOG failures.
 - Script outputs:
     - Implementation address(es)
     - Proxy address(es)
