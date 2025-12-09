@@ -2,25 +2,25 @@
 
 ## Introduction
 
-This checklist is a deployment-readiness framework for smart contract protocols, used by developers and auditors to ensure a secure, controlled, and observable launch on mainnet or other live networks. It guides engineering teams through architecture decisions, role setup, proxy initialization, asset assumptions, monitoring, and emergency procedures, while giving auditors a clear reference to validate that the system is safely upgradeable, correctly configured, and resilient to operational errors or malicious exploits. In short, it is a shared artifact that aligns builders and reviewers on what must be verified before, during, and after deployment to reduce risk, avoid footguns, and support ongoing governance and incident response.
+This checklist is a deployment-readiness framework designed by Shred Security for protocols, used by developers and auditors to ensure a secure, controlled, and observable launch on mainnet or other live networks. It guides engineering teams through architecture decisions, role setup, proxy initialization, asset assumptions, monitoring, and emergency procedures, while giving auditors a clear reference to validate that the system is safely upgradeable, correctly configured, and resilient to operational errors or malicious exploits. In short, it is a shared artifact that aligns builders and reviewers on what must be verified before, during, and after deployment to reduce risk, avoid footguns, and support ongoing governance and incident response.
 
 ## Table of Contents
 
-1. [**Pre-Deployment (Design & Review)**](#pre-deployment-design--review)
-    - 1.1 Architecture & Upgradeability
-    - 1.2 Threat Model & Deployment Risks
-    - 1.3 Audits & Testing Readiness
-    - 1.4 External Asset & Token Behavior Validation
-2. [**Deployment Plan (Scripts + Human Steps)**](#deployment-plan-scripts--human-steps)
-    - 2.1 Deployment script sanity]
-    - 2.2 Proxy Deployment & Initialization Controls
-    - 2.3 Explorer Verification & Alias Consistency
-    - 2.4 Admin & Key Management Requirements
-3. [**Post-deployment checks (right after mainnet deploy)**](#post-deployment-checks-right-after-mainnet-deploy)
-    - 3.1 On-Chain Read-Only Sanity Validation
-    - 3.2 Functional Smoke Tests
-    - 3.3 Monitoring, Alerting & Observability Setup
-    - 3.4 Emergency Procedures & Incident Response
+[**1. Pre-Deployment (Design & Review)**](#pre-deployment-design--review)
+    - [1.1 Architecture & Upgradeability](#11-architecture--upgradeability)
+    - [1.2 Threat Model & Deployment Risks](#12-threat-model--deployment-risks)
+    - [1.3 Audits & Testing Readiness](#13-audits--testing-readiness)
+    - [1.4 External Asset & Token Behavior Validation](#14-external-asset--token-behavior-validation)
+[**2. Deployment Plan (Scripts + Human Steps)**](#deployment-plan-scripts--human-steps)
+    - [2.1 Deployment script sanity](#21-deployment-script-sanity)
+    - [2.2 Proxy Deployment & Initialization Controls](#22-proxy-deployment--initialization-controls)
+    - [2.3 Explorer Verification & Alias Consistency](#23-explorer-verification--alias-consistency)
+    - [2.4 Admin & Key Management Requirements](#24-admin--key-management-requirements)
+[**3. Post-deployment checks (right after mainnet deploy)**](#post-deployment-checks-right-after-mainnet-deploy)
+    - [3.1 On-Chain Read-Only Sanity Validation](#31-on-chain-read-only-sanity-validation)
+    - [3.2 Functional Smoke Tests](#32-functional-smoke-tests)
+    - [3.3 Monitoring, Alerting & Observability Setup](#33-monitoring-alerting--observability-setup)
+    - [3.4 Emergency Procedures & Incident Response](#34-emergency-procedures--incident-response)
 
 ## 1. Pre-deployment (design & review)
 
