@@ -6,7 +6,7 @@ This checklist is a deployment-readiness framework designed by Shred Security fo
 
 ## Table of Contents
 
-[**1. Pre-Deployment (Design & Review)**](#pre-deployment-design--review)
+1. [**Pre-Deployment (Design & Review)**](#pre-deployment-design--review)
     - [1.1 Architecture & Upgradeability](#11-architecture--upgradeability)
     - [1.2 Threat Model & Deployment Risks](#12-threat-model--deployment-risks)
     - [1.3 Audits & Testing Readiness](#13-audits--testing-readiness)
