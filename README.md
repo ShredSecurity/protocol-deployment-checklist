@@ -6,7 +6,7 @@ This checklist is a deployment-readiness framework for smart contract protocols,
 
 ## Table of Contents
 
-1. [Pre-Deployment (Design & Review)](#Pre-deployment-(design-&-review))
+1. [Pre-Deployment (Design & Review)](#pre-deployment-design--review)
     - 1.1 Architecture & Upgradeability
     - 1.2 Threat Model & Deployment Risks
     - 1.3 Audits & Testing Readiness
