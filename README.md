@@ -1,8 +1,28 @@
 # Protocol Deployment Checklist
 
-## A. Pre-deployment (design & review)
+## Introduction
 
 This checklist is a deployment-readiness framework for smart contract protocols, used by developers and auditors to ensure a secure, controlled, and observable launch on mainnet or other live networks. It guides engineering teams through architecture decisions, role setup, proxy initialization, asset assumptions, monitoring, and emergency procedures, while giving auditors a clear reference to validate that the system is safely upgradeable, correctly configured, and resilient to operational errors or malicious exploits. In short, it is a shared artifact that aligns builders and reviewers on what must be verified before, during, and after deployment to reduce risk, avoid footguns, and support ongoing governance and incident response.
+
+## Table of Contents
+
+1. Pre-Deployment (Design & Review)
+	1.1 Architecture & Upgradeability
+	1.2 Threat Model & Deployment Risks
+	1.3 Audits & Testing Readiness
+	1.4 External Asset & Token Behavior Validation
+2. Deployment Plan (Scripts + Human Steps)
+	2.1 Deployment script sanity
+	2.2 Proxy Deployment & Initialization Controls
+	2.3 Explorer Verification & Alias Consistency
+	2.4 Admin & Key Management Requirements
+3. Post-Deployment Checks
+	3.1 On-Chain Read-Only Sanity Validation
+	3.2 Functional Smoke Tests
+	3.3 Monitoring, Alerting & Observability Setup
+	3.4 Emergency Procedures & Incident Response
+
+## Pre-deployment (design & review)
 
 ### 1\. Architecture & upgradeability
 
@@ -11,13 +31,13 @@ This checklist is a deployment-readiness framework for smart contract protocols,
 - Is initialization **one-time only** (e.g. OpenZeppelin `initializer` modifiers) and impossible to re-run?
 - Have we explicitly listed *all* privileged roles and capabilities (admin, pauser, guardian, minter, oracle manager, etc.)
 
-### 2\. Threat model for deployment
+### 2\. Threat Model & Deployment Risks
 
 - Have we considered MEV / frontrunning during deployment / initialization?
 - Are any “critical” steps done in separate, controlled txs (e.g. set admin, then initialize, etc.)?
 - Do we have a plan if deployment tx fails or is partially mined?
 
-### 3\. Audits & tests
+### 3\. Audits & Testing Readiness
 
 - Contracts audited (including proxy wiring / initialization logic, not just core logic).
 - Tests include:
@@ -25,7 +45,7 @@ This checklist is a deployment-readiness framework for smart contract protocols,
     - Tests where init is called unexpectedly / twice / by wrong address.
     - Tests for emergency pause / shutdown.
 
-### 4. Assets / external tokens
+### 4. External Asset & Token Behavior Validation
 
 - For each external token:
     - Have we defined in the spec doc for each network:
@@ -37,7 +57,7 @@ This checklist is a deployment-readiness framework for smart contract protocols,
 Example: some chains have a “WETH” token address that is not a canonical wrapped ETH contract, it may simply be a standard ERC-20 with no `deposit()` or `withdraw()` function (e.g., certain networks’ WETH tokens behave this way like SAGA).
 If your system assumes native wrap/unwrap semantics, this must be verified and documented per network.
 
-## B. Deployment plan (scripts + human steps)
+## Deployment plan (scripts + human steps)
 
 ### 1\. Deployment script sanity
 
@@ -52,7 +72,7 @@ If your system assumes native wrap/unwrap semantics, this must be verified and d
     - unset admin, or
     - admin = deployer EOA by accident.
 
-### 2\. Proxy deployment & initialization
+### 2\. Proxy Deployment & Initialization Controls
 
 - Admin is set first to a secure address (e.g. multisig) before anything else critical.
 - Initialization is done via a controlled call:
@@ -63,14 +83,14 @@ If your system assumes native wrap/unwrap semantics, this must be verified and d
     - Implementation = expected address.
     - `initialized` flag (if present) is set and cannot be toggled back.
 
-### 3\. Explorer verification & aliasing
+### 3\. Explorer Verification & Alias Consistency
 
 - Implementation contracts verified on Etherscan/other explorers.
 - Proxy correctly labeled as proxy + implementation set.
 - Cross-check: explorer points to same implementation that your deployment script reports.
 - We verify bytecode matches audited commit hash, not just “source compiles.”
 
-### 4\. Admin & key management
+### 4\. Admin & Key Management Requirements
 
 - Admin is multisig or DAO, not a single EOA.
 - Signers validated and live.
@@ -78,9 +98,9 @@ If your system assumes native wrap/unwrap semantics, this must be verified and d
 - Role assignment (RBAC) executed and recorded.
 
 
-## C. Post-deployment checks (right after mainnet deploy)
+## Post-deployment checks (right after mainnet deploy)
 
-### 1\. Read-only sanity checks
+### 1\. On-Chain Read-Only Sanity Validation
 
 - For each proxy:
     - `admin()` / `getAdmin()` returns correct admin.
@@ -95,7 +115,7 @@ If your system assumes native wrap/unwrap semantics, this must be verified and d
 - Tiny “canary” value deposited / traded / minted and then withdrawn.
 - Storage layout matches expectations (e.g., view functions returning sane balances, config values).
 
-### 3\. Monitoring & alerting
+### 3\. Monitoring, Alerting & Observability Setup
 
 - On-chain alerts set for:
     - any implementation upgrade.
@@ -103,7 +123,7 @@ If your system assumes native wrap/unwrap semantics, this must be verified and d
     - abnormal minting / borrowing / swapping thresholds.
 - Logs / dashboards ready for launch (e.g. Dune / Flipside / custom).
 
-### 4\. Emergency procedures
+### 4\. Emergency Procedures & Incident Response
 
 - Can we pause quickly? Who has pauser role?
 - Is everyone aware of the “oh shit” runbook:
