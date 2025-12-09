@@ -154,3 +154,9 @@ If your system assumes native wrap/unwrap semantics, this must be verified and d
     - how to coordinate with CEXs / law enforcement if needed.
 - If multi-chain, include cross-domain response procedures (pause bridges / relayers).
 - Test dry-run emergency drills quarterly on devnets.
+
+## About Shred Security
+
+This checklist is authored and maintained by Shred Security, a research-driven security firm specializing in smart contract auditing, threat modeling, and blockchain security.
+
+For review engagements, deployment war rooms, or full protocol audits, you can reach us at [Telegram](https://t.me/shredsecurity).
