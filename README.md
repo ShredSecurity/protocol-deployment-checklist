@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This checklist is a deployment-readiness framework designed by Shred Security for protocols, used by developers and auditors to ensure a secure, controlled, and observable launch on mainnet or other live networks. It guides engineering teams through architecture decisions, role setup, proxy initialization, asset assumptions, monitoring, and emergency procedures, while giving auditors a clear reference to validate that the system is safely upgradeable, correctly configured, and resilient to operational errors or malicious exploits. In short, it is a shared artifact that aligns builders and reviewers on what must be verified before, during, and after deployment to reduce risk, avoid footguns, and support ongoing governance and incident response.
+This checklist is a deployment-readiness framework designed by Shred Security for protocols, used by developers and auditors to ensure a secure, controlled, and observable launch on mainnet or other live networks. It guides engineering teams through architecture decisions, role setup, proxy initialization, asset assumptions, monitoring, and emergency procedures, while giving auditors a clear reference to validate that the system is safely upgradeable, correctly configured, and resilient to operational errors or malicious exploits.
 
 ## Table of Contents
 
