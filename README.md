@@ -40,14 +40,14 @@ It is intended to be used by protocol engineering teams during deployment and by
 ### Severity Definition
 
 - **BLOCKER**
-A requirement that **must be satisfied before deployment to a live network**.
-Any unresolved BLOCKER **prevents launch** and requires remediation or an explicit decision to delay deployment.
+	- A requirement that **must be satisfied before deployment to a live network**.
+	- Any unresolved BLOCKER **prevents launch** and requires remediation or an explicit decision to delay deployment.
 - **WARNING**
-A requirement that **does not strictly block deployment**, but represents a **material security, operational, or reliability risk** if unmet.
-WARNING items may proceed to launch **only if the risk is explicitly acknowledged, documented, and accepted** by the protocol’s responsible authority (e.g., multisig, DAO, or security lead).
+	- A requirement that **does not strictly block deployment**, but represents a **material security, operational, or reliability risk** if unmet.
+	- WARNING items may proceed to launch **only if the risk is explicitly acknowledged, documented, and accepted** by the protocol’s responsible authority (e.g., multisig, DAO, or security lead).
 - INFO
-A **best-practice or observability recommendation** that improves safety, transparency, or operational maturity but **does not impact launch eligibility**.
-INFO items should be addressed where practical and tracked for future improvements.
+	- A **best-practice or observability recommendation** that improves safety, transparency, or operational maturity but **does not impact launch eligibility**.
+	- INFO items should be addressed where practical and tracked for future improvements.
 
 ## 1. Pre-deployment (design & review)
 
