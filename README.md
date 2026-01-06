@@ -2,7 +2,16 @@
 
 ## Introduction
 
-This checklist is a deployment-readiness framework designed by Shred Security for protocols, used by developers and auditors to ensure a secure, controlled, and observable launch on mainnet or other live networks. It guides engineering teams through architecture decisions, role setup, proxy initialization, asset assumptions, monitoring, and emergency procedures, while giving auditors a clear reference to validate that the system is safely upgradeable, correctly configured, and resilient to operational errors or malicious exploits.
+This checklist defines a baseline standard for deploying smart contract protocols to mainnet and other live networks.
+
+It is intended to be used by protocol engineering teams during deployment and by auditors to verify that deployment, upgradeability, role configuration, and operational safeguards are correctly implemented prior to launch.
+
+### How to use this checklist (Normative Rules)
+
+- **Required?** → mark **Yes / No / N/A**
+- N/A is allowed **only when** “Applies When” is not satisfied
+- **BLOCKER items must be resolved before launch**
+- All resolved checks should include evidence (tx hash, explorer link, doc link)
 
 ## Table of Contents
 
@@ -26,136 +35,177 @@ This checklist is a deployment-readiness framework designed by Shred Security fo
 
 ### 1\.1 Architecture & upgradeability
 
-- Are we using proxies? Which pattern? (EIP-1967, UUPS, Transparent, etc.)
-- Is there a **single clear admin** (multisig/DAO) for each proxy?
-- Is initialization **one-time only** (e.g. OpenZeppelin `initializer` modifiers) and impossible to re-run?
-- Have we explicitly listed *all* privileged roles and capabilities (admin, pauser, guardian, minter, oracle manager, etc.)
-- If deterministic addresses are required, validate CREATE2/CREATE3 assumptions:
-	- confirm salts, address derivation, multi-chain consistency (e.g., Axelar CREATE3 deployer),
-	- precompute / verify target contract address before funding or deployment.
+| Check | Applies When | Severity | Required? | Evidence/Note |
+| --- | --- | --- | --- | --- |
+| Upgradeability pattern is explicitly documented | Protocol is upgradeable | BLOCKER |     |     |
+| Each proxy has exactly one clearly defined admin | Proxies are used | BLOCKER |     |     |
+| Proxy admin is not an EOA | Proxies are used | BLOCKER |     |     |
+| Initialization functions are one-time only | Proxies are used | BLOCKER |     |     |
+| Re-initialization is impossible | Proxies are used | BLOCKER |     |     |
+| All privileged roles are explicitly listed | Any privileged access exists | WARNING |     |     |
+| Capabilities of each privileged role are documented | Any privileged access exists | WARNING |     |     |
+| Deterministic deployment assumptions documented | CREATE2 / CREATE3 used | WARNING |     |     |
+| CREATE2 / CREATE3 salts are finalized | CREATE2 / CREATE3 used | BLOCKER |     |     |
+| Deterministic addresses precomputed | CREATE2 / CREATE3 used | BLOCKER |     |     |
+| Deterministic addresses consistent across chains | Multi-chain + deterministic deploy | BLOCKER |     |     |
+| Deterministic deployer is trusted and verified | CREATE2 / CREATE3 used | BLOCKER |     |     |
 
 ### 1\.2 Threat Model & Deployment Risks
 
-- Have we considered MEV / frontrunning during deployment / initialization?
-	- Simulate chain-side deployment risks:
-		- use Tenderly/Foundry simulations for MEV/frontrun scenarios,
-		- explicitly check L2 sequencer assumptions (censorship, delayed inclusion, forced ops).
-- Are any “critical” steps done in separate, controlled txs (e.g. set admin, then initialize, etc.)?
-- Do we have a plan if deployment tx fails or is partially mined?
+| Check | Applies When | Severity | Required? | Evidence/Note |
+| --- | --- | --- | --- | --- |
+| Deployment-specific threat model completed | Always | BLOCKER |     |     |
+| MEV / frontrunning risks evaluated | Public deployment | BLOCKER |     |     |
+| Deployment simulated against MEV scenarios | Public deployment | WARNING |     |     |
+| Deployment txs simulated in Tenderly / Foundry | Always | WARNING |     |     |
+| L2 sequencer risks evaluated | Deploying on L2 | BLOCKER |     |     |
+| Critical steps separated into controlled txs | Admin / init actions exist | BLOCKER |     |     |
+| Recovery plan for failed deployment exists | Always | BLOCKER |     |     |
+| Recovery plan for failed initialization exists | Proxies are used | BLOCKER |     |     |
 
 ### 1\.3 Audits & Testing Readiness
 
-- Contracts audited (including proxy wiring / initialization logic, not just core logic).
-- Tests include:
-    - Fork tests simulating mainnet state.
-    - Tests where init is called unexpectedly / twice / by wrong address.
-    - Tests for emergency pause / shutdown.
-    - Invariant / fuzz tests for upgrade risk:
-		- proxy storage collision testing,
-		- metamorphic logic / upgrade paths under Echidna or Foundry invariants.
+| Check | Applies When | Severity | Required? | Evidence/Note |
+| --- | --- | --- | --- | --- |
+| Contracts audited by independent party | Always | BLOCKER |     |     |
+| Proxy wiring included in audit | Proxies are used | BLOCKER |     |     |
+| Fork-based mainnet tests executed | Always | WARNING |     |     |
+| Unauthorized / double-init tests exist | Proxies are used | BLOCKER |     |     |
+| Emergency pause tested | Pause functionality exists | BLOCKER |     |     |
+| Storage layout compatibility tested | Proxies are used | BLOCKER |     |     |
+| Upgrade invariants tested | Proxies are used | WARNING |     |     |
+| Fuzz / Invariant Testing / Formal Verification executed | Complex logic | WARNING |     |     |
 
 ### 1.4 External Asset & Token Behavior Validation
 
-- For each external token:
-    - Have we defined in the spec doc for each network:
-        - Token contract address
-        - Expected `symbol()`
-        - Expected `decimals()`
-    - Are we clear on token behavior?
-        - For each external asset, confirm that its behavior matches what your protocol expects.
-Example: some chains have a “WETH” token address that is not a canonical wrapped ETH contract, it may simply be a standard ERC-20 with no `deposit()` or `withdraw()` function (e.g., certain networks’ WETH tokens behave this way like SAGA).
-If your system assumes native wrap/unwrap semantics, this must be verified and documented per network.
-	- Cross-reference canonical token metadata (e.g., Chainlink registry / L2Beat asset lists) where available to reduce mismatch risk.
+| Check | Applies When | Severity | Required? | Evidence/Note |
+| --- | --- | --- | --- | --- |
+| External tokens listed per network | External assets used | BLOCKER |     |     |
+| Token addresses verified | External assets used | BLOCKER |     |     |
+| Token symbols verified | External assets used | WARNING |     |     |
+| Token decimals verified | External assets used | BLOCKER |     |     |
+| Token behavior assumptions documented | External assets used | BLOCKER |     |     |
+| Wrapped native behavior verified | Native wrap assumed | BLOCKER |     |     |
+| Native wrap assumptions documented | Native wrap assumed | BLOCKER |     |     |
+| Canonical token metadata cross-referenced | Canonical source exists | INFO |     |     |
+| Non-standard behavior documented | Non-standard tokens used | BLOCKER |     |     |
 
 ## 2. Deployment plan (scripts + human steps)
 
 ### 2.1 Deployment script sanity
 
-- Network IDs, RPC URLs, gas configs correct.
-- Deterministic address / salt planning:
-	- if using CREATE2/CREATE3, precompute target addresses (`ethers.utils.getCreate2Address`)
-	- verify salts and factory deployment ordering.
-- Script outputs:
-    - Implementation address(es)
-    - Proxy address(es)
-    - Admin / owner addresses
-    - Initialization params
-- There is NO path where a proxy is deployed with:
-    - unset admin, or
-    - admin = deployer EOA by accident.
+| Check | Applies When | Severity | Required? | Evidence/Note |
+| --- | --- | --- | --- | --- |
+| Network and chain ID correct | Always | BLOCKER |     |     |
+| RPC and gas configuration verified | Always | BLOCKER |     |     |
+| Deterministic target addresses precomputed | CREATE2 / CREATE3 used | BLOCKER |     |     |
+| Salts and factories verified | CREATE2 / CREATE3 used | BLOCKER |     |     |
+| Script outputs implementation addresses | Always | BLOCKER |     |     |
+| Script outputs proxy addresses | Proxies are used | BLOCKER |     |     |
+| Script outputs admin addresses | Proxies are used | BLOCKER |     |     |
+| Script outputs initialization parameters | Proxies are used | BLOCKER |     |     |
+| No proxy deployed without admin | Proxies are used | BLOCKER |     |     |
+| Deployer EOA cannot become admin unintentionally | Proxies are used | BLOCKER |     |     |
 
 ### 2.2 Proxy Deployment & Initialization Controls
 
-- Admin is set first to a secure address (e.g. multisig) before anything else critical.
-- Initialization is done via a controlled call:
-    - No unnecessary Multicall / batching with third-party contracts.
-    - No public `initialize()` that anyone can call if proxy is uninitialized.
-- Confirm from logs / explorer:
-    - Proxy admin = expected admin.
-    - Implementation = expected address.
-    - `initialized` flag (if present) is set and cannot be toggled back.
-- For multi-chain deployments:
-	- ensure coordinated sequencing across chains (manual or relayer-based),
-	- verify that ordering is preserved per chain.
+| Check | Applies When | Severity | Required? | Evidence/Note |
+| --- | --- | --- | --- | --- |
+| Admin set before critical actions | Proxies are used | BLOCKER |     |     |
+| Initialization executed via controlled tx | Proxies are used | BLOCKER |     |     |
+| Initialization not publicly callable | Proxies are used | BLOCKER |     |     |
+| Initialization not batched with third-party calls | Proxies are used | WARNING |     |     |
+| Proxy admin verified on-chain | Proxies are used | BLOCKER |     |     |
+| Proxy implementation verified on-chain | Proxies are used | BLOCKER |     |     |
+| Initialization state verified | Proxies are used | BLOCKER |     |     |
+| Initialization cannot be reset | Proxies are used | BLOCKER |     |     |
+| Multi-chain deployment sequencing documented | Multi-chain deploy | BLOCKER |     |     |
+| Per-chain deployment order verified | Multi-chain deploy | BLOCKER |     |     |
 
 ### 2.3 Explorer Verification & Alias Consistency
 
-- Implementation contracts verified on Etherscan/other explorers.
-- Proxy correctly labeled as proxy + implementation set.
-- Cross-check: explorer points to same implementation that your deployment script reports.
-- We verify bytecode matches audited commit hash, not just “source compiles.”
-- Verify across multi-chain explorers and cross-check with API-derived creation data (e.g., Arbiscan / OptimismScan / `getcontractcreation`).
+| Check | Applies When | Severity | Required? | Evidence/Note |
+| --- | --- | --- | --- | --- |
+| Implementation contracts verified | Always | BLOCKER |     |     |
+| Proxies correctly labeled | Proxies are used | BLOCKER |     |     |
+| Explorer implementation matches script output | Proxies are used | BLOCKER |     |     |
+| Verified source matches audited commit | Always | BLOCKER |     |     |
+| Bytecode matches audited build | Always | BLOCKER |     |     |
+| Creation metadata cross-checked | Explorer API available | WARNING |     |     |
+| Verification completed on all chains | Multi-chain deploy | BLOCKER |     |     |
 
 ### 2.4 Admin & Key Management Requirements
 
-- Admin is multisig or DAO, not a single EOA.
-- Signers validated and live.
-- Secure backups / hardware wallets configured.
-- Role assignment (RBAC) executed and recorded.
-- Document multisig quorum and rotation cadence; test role transfers in staging.
+| Check | Applies When | Severity | Required? | Evidence/Note |
+| --- | --- | --- | --- | --- |
+| Admin roles held by multisig / DAO | Privileged admin exists | BLOCKER |     |     |
+| Multisig signers validated | Multisig used | BLOCKER |     |     |
+| Secure key storage in use | Privileged keys exist | BLOCKER |     |     |
+| Secure backups exist | Privileged keys exist | WARNING |     |     |
+| Role assignments executed and recorded | RBAC used | BLOCKER |     |     |
+| Multisig quorum documented | Multisig used | BLOCKER |     |     |
+| Admin rotation procedures documented | Multisig used | WARNING |     |     |
+| Role transfers tested in staging | RBAC used | WARNING |     |     |
 
 ## 3. Post-deployment checks (right after mainnet deploy)
 
 ### 3.1 On-Chain Read-Only Sanity Validation
 
-- For each proxy:
-    - `admin()` / `getAdmin()` returns correct admin.
-    - `implementation()` returns expected implementation.
-    - `initialized` / `version` variables look correct.
-- No leftover functions that can:
-    - change implementation without admin.
-    - re-initialize logic.
-- Cross-query via multiple RPC providers to avoid RPC-specific inconsistencies,
-- directly verify EIP-1967 slots.
+| Check | Applies When | Severity | Required? | Evidence/Note |
+| --- | --- | --- | --- | --- |
+| Proxy admin returns expected value | Proxies are used | BLOCKER |     |     |
+| Proxy implementation returns expected value | Proxies are used | BLOCKER |     |     |
+| Initialization / version variables correct | Proxies are used | BLOCKER |     |     |
+| No unauthorized upgrade paths exist | Proxies are used | BLOCKER |     |     |
+| No re-initialization paths exist | Proxies are used | BLOCKER |     |     |
+| EIP-1967 slots inspected directly | Proxies are used | BLOCKER |     |     |
+| State verified across multiple RPCs | Always | WARNING |     |     |
 
 ### 3.2 Functional smoke tests
 
-- Tiny “canary” value deposited / traded / minted and then withdrawn.
-- Storage layout matches expectations (e.g., view functions returning sane balances, config values).
-- Include cross-contract and multi-chain edge interactions (token approval paths, bridge flows if applicable).
+| Check | Applies When | Severity | Required? | Evidence/Note |
+| --- | --- | --- | --- | --- |
+| Canary interaction executed | Always | BLOCKER |     |     |
+| Core flows work with small values | Always | BLOCKER |     |     |
+| Storage values sane | Always | WARNING |     |     |
+| Cross-contract interactions validated | Multi-contract system | WARNING |     |     |
+| Multi-chain edge cases tested | Multi-chain deploy | WARNING |     |     |
 
 ### 3.3 Monitoring, Alerting & Observability Setup
 
-- On-chain alerts set for:
-    - any implementation upgrade.
-    - any admin / role change.
-    - abnormal minting / borrowing / swapping thresholds.
-- Logs / dashboards ready for launch (e.g. Dune / Flipside / custom).
-- Make sure subgraph / indexer ingestion is working (The Graph, custom indexer).
-- If on L2, include monitoring of challenge windows, sequencer downtime events.
+| Check | Applies When | Severity | Required? | Evidence/Note |
+| --- | --- | --- | --- | --- |
+| Alerts for upgrades configured | Proxies are used | BLOCKER |     |     |
+| Alerts for admin / role changes | Privileged roles exist | BLOCKER |     |     |
+| Economic anomaly alerts configured | Value-bearing protocol | WARNING |     |     |
+| Dashboards live and ingesting | Analytics required | INFO |     |     |
+| Indexers / subgraphs synced | Indexer used | BLOCKER |     |     |
+| L2 risk monitoring enabled | Deploying on L2 | WARNING |     |     |
 
 ### 3.4 Emergency Procedures & Incident Response
 
-- Can we pause quickly? Who has pauser role?
-- Is everyone aware of the “oh shit” runbook:
-    - which contracts to pause,
-    - what to tell users (“revoke approvals”, etc.),
-    - how to coordinate with CEXs / law enforcement if needed.
-- If multi-chain, include cross-domain response procedures (pause bridges / relayers).
-- Test dry-run emergency drills quarterly on devnets.
+| Check | Applies When | Severity | Required? | Evidence/Note |
+| --- | --- | --- | --- | --- |
+| Emergency pause confirmed functional | Pause exists | BLOCKER |     |     |
+| Pauser role holders identified | Pause exists | BLOCKER |     |     |
+| Incident response runbook documented | Always | BLOCKER |     |     |
+| User communication plan documented | User-facing protocol | WARNING |     |     |
+| Cross-chain emergency procedures defined | Multi-chain deploy | BLOCKER |     |     |
+| Emergency drills scheduled | Always | INFO |     |     |
+
 
 ## About Shred Security
 
 This checklist is authored and maintained by Shred Security, a research-driven security firm specializing in smart contract auditing, threat modeling, and blockchain security.
 
 For review engagements, deployment war rooms, or full protocol audits, you can reach us at [Telegram](https://t.me/shredsecurity).
+
+---
+
+## License
+
+© 2026 Shred Security
+
+This work is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
+
+You are free to share and adapt this checklist for any purpose, including commercial use, provided appropriate credit is given to Shred Security.
