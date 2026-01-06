@@ -216,7 +216,7 @@ It is intended to be used by protocol engineering teams during deployment and by
 
 This checklist is authored and maintained by Shred Security, a research-driven security firm specializing in smart contract auditing, threat modeling, and blockchain security.
 
-For review engagements, deployment war rooms, or full protocol audits, you can reach us at [Telegram](https://t.me/shredsecurity).
+For review engagements, deployment war rooms, or full protocol audits, you can reach us at [shredsec.xyz](https://shredsec.xyz).
 
 ---
 
