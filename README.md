@@ -1,20 +1,13 @@
 # Protocol Deployment Checklist
 
-## Introduction
-
-This checklist defines a baseline standard for deploying smart contract protocols to mainnet and other live networks.
-
-It is intended to be used by protocol engineering teams during deployment and by auditors to verify that deployment, upgradeability, role configuration, and operational safeguards are correctly implemented prior to launch.
-
-### How to use this checklist (Normative Rules)
-
-- **Required?** → mark **Yes / No / N/A**
-- N/A is allowed **only when** “Applies When” is not satisfied
-- **BLOCKER items must be resolved before launch**
-- All resolved checks should include evidence (tx hash, explorer link, doc link)
+**Version:** v1.0.0  
+**Status:** Stable  
+**Last updated:** 2026-01-06
 
 ## Table of Contents
 
+- [**Introduction**](#introduction)
+- [**How to use this checklist (Normative Rules)**](#how-to-use-this-checklist-normative-rules)
 1. [**Pre-Deployment (Design & Review)**](#1-pre-deployment-design--review)
     - [1.1 Architecture & Upgradeability](#11-architecture--upgradeability)
     - [1.2 Threat Model & Deployment Risks](#12-threat-model--deployment-risks)
@@ -30,6 +23,31 @@ It is intended to be used by protocol engineering teams during deployment and by
     - [3.2 Functional Smoke Tests](#32-functional-smoke-tests)
     - [3.3 Monitoring, Alerting & Observability Setup](#33-monitoring-alerting--observability-setup)
     - [3.4 Emergency Procedures & Incident Response](#34-emergency-procedures--incident-response)
+
+## Introduction
+
+This checklist defines a baseline standard for deploying smart contract protocols to mainnet and other live networks.
+
+It is intended to be used by protocol engineering teams during deployment and by auditors to verify that deployment, upgradeability, role configuration, and operational safeguards are correctly implemented prior to launch.
+
+## How to use this checklist (Normative Rules)
+
+- **Required?** → mark **Yes / No / N/A**
+- N/A is permitted **only when** the condition in “**Applies When**” is not satisfied and must be justified in the Evidence/Note column.
+- Each checklist item includes a Severity level that defines its impact on launch readiness.
+- All resolved items should include **verifiable evidence** (transaction hash, explorer link, commit hash, or documentation reference).
+
+### Severity Definition
+
+- **BLOCKER**
+A requirement that **must be satisfied before deployment to a live network**.
+Any unresolved BLOCKER **prevents launch** and requires remediation or an explicit decision to delay deployment.
+- **WARNING**
+A requirement that **does not strictly block deployment**, but represents a **material security, operational, or reliability risk** if unmet.
+WARNING items may proceed to launch **only if the risk is explicitly acknowledged, documented, and accepted** by the protocol’s responsible authority (e.g., multisig, DAO, or security lead).
+- INFO
+A **best-practice or observability recommendation** that improves safety, transparency, or operational maturity but **does not impact launch eligibility**.
+INFO items should be addressed where practical and tracked for future improvements.
 
 ## 1. Pre-deployment (design & review)
 
