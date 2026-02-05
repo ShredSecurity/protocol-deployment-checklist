@@ -1,8 +1,8 @@
 # Protocol Deployment Checklist
 
-**Version:** v1.0.0  
+**Version:** v1.0.1  
 **Status:** Stable  
-**Last updated:** 2026-01-06
+**Last updated:** 2026-03-05
 
 ## Table of Contents
 
@@ -211,14 +211,26 @@ It is intended to be used by protocol engineering teams during deployment and by
 | Cross-chain emergency procedures defined | Multi-chain deploy | BLOCKER |     |     |
 | Emergency drills scheduled | Always | INFO |     |     |
 
+## Contributions
+
+We welcome and appreciate contributions to the protocol deployment checklist! If you'd like to improve or add to the checklist, please fork the repository, make your changes, and submit a pull request (PR). All contributions are reviewed, and we encourage discussions around new ideas or improvements.
+
+### How to contribute:
+
+1. Fork the repository
+2. Create a new branch for your changes
+3. Make the necessary edits
+4. Submit a pull request (PR)
+
+Please ensure that your changes follow the style and formatting conventions used in the checklist. We also encourage you to provide a clear description of what your contribution improves or adds.
+
+Thank you for helping us improve this checklist!
 
 ## About Shred Security
 
-This checklist is authored and maintained by Shred Security, a research-driven security firm specializing in smart contract auditing, threat modeling, and blockchain security.
+Shred Security is a research-driven security firm specializing in smart contract auditing, threat modeling, and blockchain security.
 
 For review engagements, deployment war rooms, or full protocol audits, you can reach us at [shredsec.xyz](https://shredsec.xyz).
-
----
 
 ## License
 
